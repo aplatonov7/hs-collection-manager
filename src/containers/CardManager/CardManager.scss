@@ -1,0 +1,16 @@
+.filterContainer {
+  padding-top: 30px;
+}
+
+.filterLink {
+  color: #2594ff;
+  cursor: pointer;
+
+  display: inline-block;
+  font-size: 16px;
+  margin-right: 10px;
+
+  &:hover {
+    color: lighten(#2594ff, 20%);
+  }
+}

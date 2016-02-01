@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { actions as counterActions } from '../../redux/modules/counter';
+import { actions as counterActions } from 'redux/modules/counter';
 import DuckImage from './Duck.jpg';
 import classes from './HomeView.scss';
+import CardManager from 'containers/CardManager/CardManager';
 
 // We define mapStateToProps where we'd normally use
 // the @connect decorator so the data requirements are clear upfront, but then
@@ -22,7 +23,8 @@ export class HomeView extends React.Component {
 
   render () {
     return (
-      <div className='container text-center'>
+      <div className='container-fluid text-center'>
+        <CardManager />
         <div className='row'>
           <div className='col-xs-2 col-xs-offset-5'>
             <img className={classes.duck}

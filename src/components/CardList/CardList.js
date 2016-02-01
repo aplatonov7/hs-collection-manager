@@ -1,5 +1,5 @@
-import React, {Component, PropTypes} from 'react';
-import {Loader} from 'components';
+import React, { Component, PropTypes } from 'react';
+import classes from './CardList.scss';
 
 export default class CardList extends Component {
   static propTypes = {
@@ -11,23 +11,18 @@ export default class CardList extends Component {
     changePage: PropTypes.func
   };
 
-  render() {
-    const style = require('./CardList.scss');
+  render () {
     let content;
-
-    if (this.props.loading) {
-      content = <Loader />;
-    }
 
     if (this.props.loaded) {
       content = (
-        <ul className="row">
+        <ul className='row'>
           {this.props.cards.map((card) => {
             return (
-              <li className="col-sm-6 col-md-3" key={card.cardId}
-                  onClick={this.props.onCardClick.bind(this, card.cardId)}>
-                <img className="img-responsive" src={card.img} />
-                <div className={style.cardCopies}>x{card.copies}</div>
+              <li className='col-sm-6 col-md-3' key={card.cardId}
+                  onClick={() => this.props.onCardClick(card.cardId)}>
+                <img className='img-responsive' src={card.img}/>
+                <div className={classes.cardCopies}>x{card.copies}</div>
               </li>
             );
           })}
@@ -36,11 +31,11 @@ export default class CardList extends Component {
     }
 
     return (
-      <div className={style.deckBuilder + ' col-xs-6'}>
-        <div className={style.pager}>
-          <span className={style.arrow} onClick={this.props.changePage.bind(this, this.props.page - 1)}>&lt;</span>
+      <div className={classes.deckBuilder + ' col-xs-6'}>
+        <div className={classes.pager}>
+          <span className={classes.arrow} onClick={() => this.props.changePage(this.props.page - 1)}>&lt;</span>
           {this.props.page}
-          <span className={style.arrow} onClick={this.props.changePage.bind(this, this.props.page + 1)}>&gt;</span>
+          <span className={classes.arrow} onClick={() => this.props.changePage(this.props.page + 1)}>&gt;</span>
         </div>
         {content}
       </div>
