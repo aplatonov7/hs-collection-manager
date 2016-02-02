@@ -1,0 +1,20 @@
+.classIcon {
+  width: 59px;
+  height: 59px;
+  background: #000 url('assets/images/class-icons.png');
+  display: inline-block;
+
+  border: 2px solid black;
+  border-radius: 50%;
+}
+
+.warlock  {background-position: -4px   -4px;}
+.warrior  {background-position: -4px   -67px;}
+.hunter   {background-position: -4px   -130px;}
+.rogue    {background-position: -4px   -193px;}
+.priest   {background-position: -4px   -256px;}
+.paladin  {background-position: -4px   -319px;}
+.mage     {background-position: -4px   -382px;}
+.druid    {background-position: -4px   -445px;}
+.shaman   {background-position: -4px   -508px;}
+.neutral  {background-position: -4px   -572px;}

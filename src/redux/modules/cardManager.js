@@ -16,10 +16,12 @@ const initialState = {
   cards: [],
   collection: {
     page: 1,
+    lastPage: 1,
     displayedCards: []
   },
   pool: {
     page: 1,
+    lastPage: 1,
     displayedCards: []
   },
   cardsPerPage: 12,
@@ -47,7 +49,8 @@ const refreshCardSet = (cards, page, cardsPerPage) => {
 
   return {
     displayedCards: cards.slice(start, end),
-    page: newPage
+    page: newPage,
+    lastPage: limit
   };
 };
 

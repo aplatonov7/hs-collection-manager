@@ -27,7 +27,7 @@ export default class Root extends React.Component {
         }
       } else if (!window.devToolsExtension) {
         const DevTools = require('containers/DevTools').default;
-        return <DevTools />;
+        return <DevTools defaultIsVisible={false} />;
       }
     }
   }
@@ -35,7 +35,7 @@ export default class Root extends React.Component {
   render () {
     return (
       <Provider store={this.props.store}>
-        <div style={{ height: '100%' }}>
+        <div className='pageWrap'>
           {this.content}
           {this.devTools}
         </div>

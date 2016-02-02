@@ -3,6 +3,7 @@ import CardList from 'components/CardList/CardList';
 import { actions as cardManagerActions } from 'redux/modules/cardManager';
 import { connect } from 'react-redux';
 import classes from './CardManager.scss';
+import classNames from 'classnames';
 
 const mapStateToProps = (state) => ({
   cardManager: state.cardManager
@@ -24,31 +25,43 @@ export class CardManager extends Component {
     discardAllCards: PropTypes.func
   };
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.load();
   }
 
-  render () {
-    const { collection, pool, loading, loaded, dustCost, cards } = this.props.cardManager;
+  render() {
+    const { collection, pool, dustCost, cards, filters } = this.props.cardManager;
+
+    const classFilterNames = (pClass) => classNames({
+      [classes[pClass.toLowerCase()]]: true,
+      hoverable: true,
+      'z-depth-1': true,
+      [classes.active]: filters.playerClass === pClass
+    });
+
+    const classFilterClick = (pClass) => {
+      let filter = pClass === filters.playerClass ? false : pClass;
+      this.props.changeClassFilter(filter);
+    };
 
     return (
-      <div className='container-fluid'>
-        <div className={'clearfix ' + classes.filterContainer}>
-          <div className='pull-left'>
-            <div>
-              <div className={classes.filterLink} onClick={this.props.getAllCards}>Get All Cards</div>
-              <div className={classes.filterLink} onClick={this.props.discardAllCards}>Remove All Cards</div>
+      <div>
+        <div className={'row ' + classes.filterContainer}>
+          <div className='col s3'>
+            <div className={classes.btnGroup}>
+              <span className='waves-effect waves-light btn red lighten-2' onClick={this.props.save}>
+                <i className='material-icons left'>call_received</i>Save
+              </span>
+              <span className='waves-effect waves-light btn red lighten-2' onClick={this.props.load}>
+                <i className='material-icons left'>call_made</i>Load
+              </span>
             </div>
             <div>
-              <div className={classes.filterLink} onClick={this.props.save}>Save</div>
-              <div className={classes.filterLink} onClick={this.props.load}>Load</div>
-            </div>
-            <div>
-              {dustCost}
+              Dust needed to finish the collection: {dustCost}
             </div>
           </div>
 
-          <div className='pull-right'>
+          <div className="col s3">
             <div>
               <div className={classes.filterLink} onClick={() => this.props.changeRarityFilter(false)}>Reset</div>
               <div className={classes.filterLink} onClick={() => this.props.changeRarityFilter('Common')}>Common</div>
@@ -57,7 +70,10 @@ export class CardManager extends Component {
               <div className={classes.filterLink} onClick={() => this.props.changeRarityFilter('Legendary')}>Legendary
               </div>
             </div>
-            <div>
+          </div>
+
+          <div className='col s6'>
+            <div className='right-align'>
               <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(false)}>Reset</div>
               <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(0)}>0</div>
               <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(1)}>1</div>
@@ -68,41 +84,56 @@ export class CardManager extends Component {
               <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(6)}>6</div>
               <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(7)}>7+</div>
             </div>
-            <div>
-              <div className={classes.filterLink} onClick={() => this.props.changeClassFilter(false)}>Reset</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeClassFilter('Druid')}>Druid</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeClassFilter('Hunter')}>Hunter</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeClassFilter('Mage')}>Mage</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeClassFilter('Paladin')}>Paladin</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeClassFilter('Priest')}>Priest</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeClassFilter('Rogue')}>Rogue</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeClassFilter('Shaman')}>Shaman</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeClassFilter('Warlock')}>Warlock</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeClassFilter('Warrior')}>Warrior</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeClassFilter('Neutral')}>Neutral</div>
+            <div className='right-align'>
+              <div className={classFilterNames('Druid')}    onClick={() => classFilterClick('Druid')}   title="Druid"></div>
+              <div className={classFilterNames('Hunter')}   onClick={() => classFilterClick('Hunter')}  title="Hunter"></div>
+              <div className={classFilterNames('Mage')}     onClick={() => classFilterClick('Mage')}    title="Mage"></div>
+              <div className={classFilterNames('Paladin')}  onClick={() => classFilterClick('Paladin')} title="Paladin"></div>
+              <div className={classFilterNames('Priest')}   onClick={() => classFilterClick('Priest')}  title="Priest"></div>
+              <div className={classFilterNames('Rogue')}    onClick={() => classFilterClick('Rogue')}   title="Rogue"></div>
+              <div className={classFilterNames('Shaman')}   onClick={() => classFilterClick('Shaman')}  title="Shaman"></div>
+              <div className={classFilterNames('Warlock')}  onClick={() => classFilterClick('Warlock')} title="Warlock"></div>
+              <div className={classFilterNames('Warrior')}  onClick={() => classFilterClick('Warrior')} title="Warrior"></div>
+              <div className={classFilterNames('Neutral')}  onClick={() => classFilterClick('Neutral')} title="Neutral"></div>
             </div>
           </div>
         </div>
+
         <div className='row'>
-          <CardList
-            loading={loading}
-            loaded={loaded}
-            cards={pool.displayedCards.map(id => ({
-              ...cards[id],
-              copies: cards[id].rarity === 'Legendary' ? 1 - cards[id].copies : 2 - cards[id].copies
-            }))}
-            page={pool.page}
-            changePage={this.props.changePagePool}
-            onCardClick={this.props.addCard}
-          />
-          <CardList
-            loading={loading}
-            loaded={loaded}
-            cards={collection.displayedCards.map(id => cards[id])}
-            page={collection.page}
-            changePage={this.props.changePageCollection}
-            onCardClick={this.props.removeCard}
-          />
+          <div className="col s12">
+            <span className='waves-effect waves-light btn red lighten-2 left' onClick={this.props.discardAllCards}>
+              Remove All Cards
+            </span>
+            <span className='waves-effect waves-light btn red lighten-2 right' onClick={this.props.getAllCards}>
+              Get All Cards
+            </span>
+          </div>
+        </div>
+
+        <div className="separator"></div>
+
+        <div className='row'>
+          <div className='col s6'>
+            <CardList
+              cards={pool.displayedCards.map(id => ({
+                ...cards[id],
+                copies: cards[id].rarity === 'Legendary' ? 1 - cards[id].copies : 2 - cards[id].copies
+              }))}
+              page={pool.page}
+              lastPage={pool.lastPage}
+              changePage={this.props.changePagePool}
+              onCardClick={this.props.addCard}
+            />
+          </div>
+          <div className='col s6'>
+            <CardList
+              cards={collection.displayedCards.map(id => cards[id])}
+              page={collection.page}
+              lastPage={collection.lastPage}
+              changePage={this.props.changePageCollection}
+              onCardClick={this.props.removeCard}
+            />
+          </div>
         </div>
       </div>
     );

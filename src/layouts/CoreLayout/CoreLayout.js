@@ -1,5 +1,8 @@
 import React, { PropTypes } from 'react';
 import '../../styles/core.scss';
+import logo from './hs-swirl-logo.svg';
+import classes from './CoreLayout.scss';
+import github from './GitHub-Mark.png';
 
 // Note: Stateless/function components *will not* hot reload!
 // react-transform *only* works on component classes.
@@ -12,10 +15,32 @@ import '../../styles/core.scss';
 // define it with a plain javascript function...
 function CoreLayout ({ children }) {
   return (
-    <div className='page-container'>
+    <div className='pageWrap'>
+      <nav className='blue grey darken-3'>
+        <div className='nav-wrapper'>
+          <a href='#' className={classes.logo}><img className={classes.shadowfilter} src={logo}
+                                                    alt='Hearthstone collection manager'/></a>
+          <ul id='nav-mobile' className='right hide-on-med-and-down'>
+            <li><a href='sass.html'>Sass</a></li>
+            <li><a href='badges.html'>Components</a></li>
+            <li><a href='collapsible.html'>JavaScript</a></li>
+          </ul>
+        </div>
+      </nav>
+
       <div className='view-container'>
         {children}
       </div>
+
+      <footer className='page-footer grey darken-3'>
+        <div className='footer-copyright'>
+          <div className='container'>
+            © 2016 Who Cares
+            <a className={classes.githubLink + ' grey-text text-lighten-4 right'} href='https://github.com/heartless7/hs-collection-manager' target="_blank"><img
+              src={github} alt="Github"/>Github</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
