@@ -9,7 +9,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "compile": "set NODE_ENV=production && node -r dotenv/config --harmony bin/compile",
+    "compile": "node -r dotenv/config --harmony bin/compile",
     "lint": "eslint . ./",
     "lint:fix": "npm run lint -- --fix",
     "start": "better-npm-run start",
@@ -19,7 +19,7 @@
     "test": "better-npm-run test",
     "test:dev": "npm run test -- --watch",
     "deploy": "better-npm-run deploy",
-    "start:prod": "set NODE_ENV=production && forever start bin/server.js -r dotenv/config",
+    "start:prod": "better-npm-run start:prod",
     "stop:prod": "forever stop bin/server.js"
   },
   "betterScripts": {
@@ -42,6 +42,12 @@
       "command": "node -r dotenv/config ./node_modules/karma/bin/karma start bin/karma.js",
       "env": {
         "NODE_ENV": "test"
+      }
+    },
+    "start:prod": {
+      "command": "forever start bin/server.js -r dotenv/config",
+      "env": {
+        "NODE_ENV": "production"
       }
     }
   },
