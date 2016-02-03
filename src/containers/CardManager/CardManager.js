@@ -25,11 +25,11 @@ export class CardManager extends Component {
     discardAllCards: PropTypes.func
   };
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.loadCards();
   }
 
-  render() {
+  render () {
     const { collection, pool, dustCost, cards, filters, loading } = this.props.cardManager;
 
     const classFilterNames = (pClass) => classNames({
@@ -114,7 +114,7 @@ export class CardManager extends Component {
             <div className={classes.dustInfo}>
               Dust needed to finish the collection: {dustCost}
             </div>
-            <p class='flow-text grey-text text-lighten-3'>No register\login required to use the application. The collection saves to\loads from
+            <p className='grey-text text-lighten-3'>No register\login required to use the application. The collection saves to\loads from
               your browser, so you will always get your restored collection as long as you use the same browser.</p>
           </div>
 

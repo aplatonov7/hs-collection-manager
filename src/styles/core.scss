@@ -4,6 +4,8 @@
   html {
     box-sizing: border-box;
     color: #fff;
+    font-weight: 300;
+
   }
 
   html,
@@ -41,6 +43,10 @@
     .footer-copyright {
       background: none;
     }
+  }
+
+  p {
+    font-size: 18px;
   }
 
   .separator {
