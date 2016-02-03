@@ -9,7 +9,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "compile": "node -r dotenv/config --harmony bin/compile",
+    "compile": "set NODE_ENV=production && node -r dotenv/config --harmony bin/compile",
     "lint": "eslint . ./",
     "lint:fix": "npm run lint -- --fix",
     "start": "better-npm-run start",
@@ -18,7 +18,9 @@
     "dev:no-debug": "npm run dev -- --no_debug",
     "test": "better-npm-run test",
     "test:dev": "npm run test -- --watch",
-    "deploy": "better-npm-run deploy"
+    "deploy": "better-npm-run deploy",
+    "start:prod": "set NODE_ENV=production && forever start bin/server.js -r dotenv/config",
+    "stop:prod": "forever stop bin/server.js"
   },
   "betterScripts": {
     "dev": {
@@ -48,6 +50,7 @@
   "dependencies": {
     "better-npm-run": "0.0.5",
     "classnames": "^2.2.3",
+    "connect-history-api-fallback": "^1.1.0",
     "debug": "^2.2.0",
     "dotenv": "^2.0.0",
     "express": "^4.13.4",

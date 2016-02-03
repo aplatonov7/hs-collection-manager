@@ -1,21 +1,23 @@
 import express from 'express';
+import path from 'path';
 import webpack from 'webpack';
 import webpackConfig from '../build/webpack.config';
 import _debug from 'debug';
+import history from 'connect-history-api-fallback';
 import config from '../config';
 
 const debug = _debug('app:server');
 const paths = config.utils_paths;
 const app = new express();
-
 // ------------------------------------
 // Apply Webpack HMR Middleware
 // ------------------------------------
-if (config.env === 'development') {
-  const compiler = webpack(webpackConfig);
+app.use(history());
 
+if (config.env === 'development') {
   // Enable webpack-dev and webpack-hot middleware
   const { publicPath } = webpackConfig.output;
+  const compiler = webpack(webpackConfig);
 
   app.use(require('./middleware/webpack-dev')(compiler, publicPath));
   app.use(require('./middleware/webpack-hmr')(compiler));
@@ -36,7 +38,7 @@ if (config.env === 'development') {
   // Serving ~/dist by default. Ideally these files should be served by
   // the web server and not the app server, but this helps to demo the
   // server in production.
-  app.use(convert(serve(paths.base(config.dir_dist))));
+  app.use(express.static(paths.base(config.dir_dist)));
 }
 
 export default app;
