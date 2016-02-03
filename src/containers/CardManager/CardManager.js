@@ -13,7 +13,7 @@ export class CardManager extends Component {
     cardManager: PropTypes.object,
     dispatch: PropTypes.func,
     save: PropTypes.func,
-    load: PropTypes.func,
+    loadCards: PropTypes.func,
     addCard: PropTypes.func,
     removeCard: PropTypes.func,
     changePagePool: PropTypes.func,
@@ -26,11 +26,11 @@ export class CardManager extends Component {
   };
 
   componentDidMount () {
-    this.props.load();
+    this.props.loadCards();
   }
 
   render () {
-    const { collection, pool, dustCost, cards, filters } = this.props.cardManager;
+    const { collection, pool, dustCost, cards, filters, loaded, loading } = this.props.cardManager;
 
     const classFilterNames = (pClass) => classNames({
       [classes[pClass.toLowerCase()]]: true,
@@ -60,6 +60,43 @@ export class CardManager extends Component {
       let filter = cost === filters.cost ? false : cost;
       this.props.changeCostFilter(filter);
     };
+
+    let content;
+
+    if (loading) {
+      content =
+        <div className='row'>
+          <div className='progress col s8 offset-s2'>
+            <div className='indeterminate'></div>
+          </div>
+        </div>
+    } else {
+      content =
+        <div className='row'>
+          <div className='col s6'>
+            <CardList
+              cards={pool.displayedCards.map(id => ({
+                ...cards[id],
+                copies: cards[id].rarity === 'Legendary' ? 1 - cards[id].copies : 2 - cards[id].copies
+              }))}
+              page={pool.page}
+              lastPage={pool.lastPage}
+              changePage={this.props.changePagePool}
+              onCardClick={this.props.addCard}
+            />
+          </div>
+          <div className='col s6'>
+            <CardList
+              cards={collection.displayedCards.map(id => cards[id])}
+              page={collection.page}
+              lastPage={collection.lastPage}
+              changePage={this.props.changePageCollection}
+              onCardClick={this.props.removeCard}
+            />
+          </div>
+        </div>
+    }
+
 
     return (
       <div>
@@ -147,29 +184,7 @@ export class CardManager extends Component {
           </div>
         </div>
 
-        <div className='row'>
-          <div className='col s6'>
-            <CardList
-              cards={pool.displayedCards.map(id => ({
-                ...cards[id],
-                copies: cards[id].rarity === 'Legendary' ? 1 - cards[id].copies : 2 - cards[id].copies
-              }))}
-              page={pool.page}
-              lastPage={pool.lastPage}
-              changePage={this.props.changePagePool}
-              onCardClick={this.props.addCard}
-            />
-          </div>
-          <div className='col s6'>
-            <CardList
-              cards={collection.displayedCards.map(id => cards[id])}
-              page={collection.page}
-              lastPage={collection.lastPage}
-              changePage={this.props.changePageCollection}
-              onCardClick={this.props.removeCard}
-            />
-          </div>
-        </div>
+        {content}
       </div>
     );
   }

@@ -1,7 +1,10 @@
 import { createAction, handleActions } from 'redux-actions';
+import client from 'helpers/ApiClient';
 
 const SAVE = 'hs-app/collection/SAVE';
 const LOAD = 'hs-app/collection/LOAD';
+const LOAD_SUCCESS = 'hs-app/collection/LOAD_SUCCESS';
+const LOAD_FAILURE = 'hs-app/collection/LOAD_FAILURE';
 const ADD_CARD = 'hs-app/collection/ADD_CARD';
 const REMOVE_CARD = 'hs-app/collection/REMOVE_CARD';
 const CHANGE_PAGE_POOL = 'hs-app/collection/CHANGE_PAGE_POOL';
@@ -14,6 +17,7 @@ const DISCARD_ALL_CARDS = 'hs-app/collection/DISCARD_ALL_CARDS';
 
 const initialState = {
   cards: [],
+  loaded: false,
   collection: {
     page: 1,
     lastPage: 1,
@@ -112,7 +116,13 @@ export default handleActions({
     window.localStorage.setItem('collection', JSON.stringify(state.cards));
     return state;
   },
-  [LOAD]: (state, {payload}) => ({
+  [LOAD]: (state) => ({
+    ...state,
+    loading: true,
+    loaded: false,
+    error: null
+  }),
+  [LOAD_SUCCESS]: (state, {payload}) => ({
     ...state,
     ...refreshCards({
       cards: payload,
@@ -122,7 +132,14 @@ export default handleActions({
       cardsPerPage: state.cardsPerPage
     }),
     loaded: true,
+    loading: false,
     error: null
+  }),
+  [LOAD_FAILURE]: (state, {payload}) => ({
+    ...state,
+    loading: false,
+    loaded: false,
+    error: payload
   }),
   [GET_ALL_CARDS]: (state) => {
     let cards = Object.assign({}, state.cards);
@@ -264,21 +281,50 @@ export default handleActions({
   }
 }, initialState);
 
+export const loadCards = () => {
+  return (dispatch) => {
+    dispatch(load());
+    let collection = JSON.parse(localStorage.getItem('collection'));
+
+    if (collection) {
+      dispatch(load_success(collection));
+    } else {
+      client.get('cards').then(cards => {
+        collection = {};
+        cards = [...cards['Classic'], ...cards['Goblins vs Gnomes'], ...cards['The Grand Tournament']]
+          .filter(card => card.collectible)
+          .map(card => ({...card, copies: 0}))
+          .sort((a, b) => a.cost - b.cost);
+
+        for (let i = 0; i < cards.length; i++) {
+          collection[cards[i].cardId] = cards[i];
+        }
+
+        dispatch(load_success(collection));
+      }, (err) => {
+        dispatch(load_failure(err));
+      });
+    }
+  };
+};
+
 export const save = createAction(SAVE);
-export const load = createAction(LOAD, () => JSON.parse(localStorage.getItem('collection')));
-export const addCard = createAction(ADD_CARD, value => value);
-export const removeCard = createAction(REMOVE_CARD, value => value);
-export const changePagePool = createAction(CHANGE_PAGE_POOL, value => value);
-export const changePageCollection = createAction(CHANGE_PAGE_COLLECTION, value => value);
-export const changeCostFilter = createAction(CHANGE_COST_FILTER, value => value);
-export const changeRarityFilter = createAction(CHANGE_RARITY_FILTER, value => value);
-export const changeClassFilter = createAction(CHANGE_CLASS_FILTER, value => value);
+export const load = createAction(LOAD);
+export const load_success = createAction(LOAD_SUCCESS);
+export const load_failure = createAction(LOAD_FAILURE);
+export const addCard = createAction(ADD_CARD);
+export const removeCard = createAction(REMOVE_CARD);
+export const changePagePool = createAction(CHANGE_PAGE_POOL);
+export const changePageCollection = createAction(CHANGE_PAGE_COLLECTION);
+export const changeCostFilter = createAction(CHANGE_COST_FILTER);
+export const changeRarityFilter = createAction(CHANGE_RARITY_FILTER);
+export const changeClassFilter = createAction(CHANGE_CLASS_FILTER);
 export const getAllCards = createAction(GET_ALL_CARDS);
 export const discardAllCards = createAction(DISCARD_ALL_CARDS);
 
 export const actions = {
   save,
-  load,
+  loadCards,
   addCard,
   removeCard,
   changePagePool,
