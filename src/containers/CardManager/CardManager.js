@@ -126,7 +126,7 @@ export class CardManager extends Component {
     return (
       <div>
         <div className={'row ' + classes.filterContainer}>
-          <div className='col s3'>
+          <div className='col s4'>
             <div className={classes.btnGroup}>
               <span className='waves-effect waves-light btn light-blue darken-4' onClick={this.props.save}>
                 <i className='material-icons left'>call_received</i>Save
@@ -139,11 +139,11 @@ export class CardManager extends Component {
               Dust needed to finish the collection: {dustCost}
             </div>
             <p className='grey-text text-lighten-3'>No register\login required to use the application. The collection
-              saves to\loads from
-              your browser, so you will always get your restored collection as long as you use the same browser.</p>
+              saves to\loads from your browser, so you will always get your restored collection as long as you use the
+              same browser. You also can import\export your collection via json file (click on icons near titles)</p>
           </div>
 
-          <div className='col s3'>
+          <div className='col s2'>
             <p>
               <input name='group1' type='radio' value='None' id='noneRarityFilter' defaultChecked
                      onChange={rarityFilterChange}/>

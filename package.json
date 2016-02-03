@@ -47,7 +47,8 @@
     "start:prod": {
       "command": "forever start bin/server.js -r dotenv/config",
       "env": {
-        "NODE_ENV": "production"
+        "NODE_ENV": "production",
+        "port": 80
       }
     }
   },
