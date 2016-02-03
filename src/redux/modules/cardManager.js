@@ -294,7 +294,7 @@ export const loadCards = () => {
         cards = [...cards['Classic'], ...cards['Goblins vs Gnomes'], ...cards['The Grand Tournament']]
           .filter(card => card.collectible)
           .map(card => ({...card, copies: 0}))
-          .sort((a, b) => a.cost - b.cost);
+          .sort((a, b) => a.cost - b.cost === 0 ? a.name >= b.name : a.cost - b.cost);
 
         for (let i = 0; i < cards.length; i++) {
           collection[cards[i].cardId] = cards[i];
@@ -325,6 +325,8 @@ export const discardAllCards = createAction(DISCARD_ALL_CARDS);
 export const actions = {
   save,
   loadCards,
+  load_success,
+  load_failure,
   addCard,
   removeCard,
   changePagePool,

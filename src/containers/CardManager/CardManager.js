@@ -13,6 +13,7 @@ export class CardManager extends Component {
     cardManager: PropTypes.object,
     dispatch: PropTypes.func,
     save: PropTypes.func,
+    load_success: PropTypes.func,
     loadCards: PropTypes.func,
     addCard: PropTypes.func,
     removeCard: PropTypes.func,
@@ -61,6 +62,20 @@ export class CardManager extends Component {
       this.props.changeCostFilter(filter);
     };
 
+    const collectionData = 'text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(cards));
+    const triggerUpload = () => {
+      document.getElementById('jsonFileInput').click();
+    };
+    const onFileUpload = (e) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const cards = JSON.parse(event.target.result);
+        this.props.load_success(cards);
+      };
+      reader.readAsText(e.target.files[0]);
+      e.target.value = '';
+    };
+
     let content;
 
     if (loading) {
@@ -74,7 +89,12 @@ export class CardManager extends Component {
       content =
         <div className='row'>
           <div className='col s6'>
-            <h4 className='center-align grey-text text-lighten-3'>Card pool</h4>
+            <input id='jsonFileInput' type='file' style={{display: 'none'}} onChange={onFileUpload}/>
+            <h4 className='center-align grey-text text-lighten-3'>
+              <a className='btn-floating btn waves-effect waves-light blue darken-3' title='Export you collection from json file'
+                 style={{marginRight: '10px'}} onClick={triggerUpload}><i className='material-icons'>input</i></a>
+              Card pool
+            </h4>
             <CardList
               cards={pool.displayedCards.map(id => ({
                 ...cards[id],
@@ -87,7 +107,11 @@ export class CardManager extends Component {
             />
           </div>
           <div className='col s6'>
-            <h4 className='center-align grey-text text-lighten-3'>Your collection</h4>
+            <h4 className='center-align grey-text text-lighten-3'>Your collection
+              <a className='btn-floating btn waves-effect waves-light blue darken-3'
+                 title='Download your collection to json file' style={{marginLeft: '10px'}}
+                 href={'data:' + collectionData} download='collection.json'><i className='material-icons'>play_for_work</i></a>
+            </h4>
             <CardList
               cards={collection.displayedCards.map(id => cards[id])}
               page={collection.page}
@@ -114,7 +138,8 @@ export class CardManager extends Component {
             <div className={classes.dustInfo}>
               Dust needed to finish the collection: {dustCost}
             </div>
-            <p className='grey-text text-lighten-3'>No register\login required to use the application. The collection saves to\loads from
+            <p className='grey-text text-lighten-3'>No register\login required to use the application. The collection
+              saves to\loads from
               your browser, so you will always get your restored collection as long as you use the same browser.</p>
           </div>
 
