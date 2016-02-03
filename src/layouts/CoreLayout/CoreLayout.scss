@@ -1,11 +1,6 @@
-body {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-main {
-  flex: 1 0 auto;
+.pageWrap {
+  background: url('assets/images/page-bg.jpg') fixed;
+  background-size: cover;
 }
 
 .logo {
@@ -41,4 +36,8 @@ main {
   &:hover {
     opacity: 0.7;
   }
+}
+
+.viewContainer {
+  min-height: 900px;
 }

@@ -25,11 +25,11 @@ export class CardManager extends Component {
     discardAllCards: PropTypes.func
   };
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.load();
   }
 
-  render() {
+  render () {
     const { collection, pool, dustCost, cards, filters } = this.props.cardManager;
 
     const classFilterNames = (pClass) => classNames({
@@ -39,9 +39,26 @@ export class CardManager extends Component {
       [classes.active]: filters.playerClass === pClass
     });
 
+    const costFilterNames = (cost) => classNames({
+      hoverable: true,
+      'z-depth-1': filters.cost !== cost,
+      'z-depth-2': filters.cost === cost,
+      [classes.active]: filters.cost === cost
+    });
+
     const classFilterClick = (pClass) => {
       let filter = pClass === filters.playerClass ? false : pClass;
       this.props.changeClassFilter(filter);
+    };
+
+    const rarityFilterChange = (e) => {
+      let filter = e.currentTarget.value !== 'None' ? e.currentTarget.value : false;
+      this.props.changeRarityFilter(filter);
+    };
+
+    const costFilterChange = (cost) => {
+      let filter = cost === filters.cost ? false : cost;
+      this.props.changeCostFilter(filter);
     };
 
     return (
@@ -49,68 +66,86 @@ export class CardManager extends Component {
         <div className={'row ' + classes.filterContainer}>
           <div className='col s3'>
             <div className={classes.btnGroup}>
-              <span className='waves-effect waves-light btn red lighten-2' onClick={this.props.save}>
+              <span className='waves-effect waves-light btn light-blue darken-4' onClick={this.props.save}>
                 <i className='material-icons left'>call_received</i>Save
               </span>
-              <span className='waves-effect waves-light btn red lighten-2' onClick={this.props.load}>
+              <span className='waves-effect waves-light btn light-blue darken-4' onClick={this.props.load}>
                 <i className='material-icons left'>call_made</i>Load
               </span>
             </div>
-            <div>
+            <div className={classes.dustInfo}>
               Dust needed to finish the collection: {dustCost}
             </div>
           </div>
 
-          <div className="col s3">
+          <div className='col s3'>
             <div>
-              <div className={classes.filterLink} onClick={() => this.props.changeRarityFilter(false)}>Reset</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeRarityFilter('Common')}>Common</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeRarityFilter('Rare')}>Rare</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeRarityFilter('Epic')}>Epic</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeRarityFilter('Legendary')}>Legendary
-              </div>
+              <p>
+                <input name='group1' type='radio' value='None' id='noneRarityFilter' defaultChecked
+                       onChange={rarityFilterChange}/>
+                <label className={classes.noneRadio} htmlFor='noneRarityFilter'>None</label>
+              </p>
+              <p>
+                <input name='group1' type='radio' value='Common' id='commonRarityFilter' onChange={rarityFilterChange}/>
+                <label className={classes.commonRadio} htmlFor='commonRarityFilter'>Common</label>
+              </p>
+              <p>
+                <input name='group1' type='radio' value='Rare' id='rareRarityFilter' onChange={rarityFilterChange}/>
+                <label className={classes.rareRadio} htmlFor='rareRarityFilter'>Rare</label>
+              </p>
+              <p>
+                <input name='group1' type='radio' value='Epic' id='epicRarityFilter' onChange={rarityFilterChange}/>
+                <label className={classes.epicRadio} htmlFor='epicRarityFilter'>Epic</label>
+              </p>
+              <p>
+                <input name='group1' type='radio' value='Legendary' id='legendaryRarityFilter'
+                       onChange={rarityFilterChange}/>
+                <label className={classes.legendaryRadio} htmlFor='legendaryRarityFilter'>Legendary</label>
+              </p>
             </div>
           </div>
 
           <div className='col s6'>
             <div className='right-align'>
-              <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(false)}>Reset</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(0)}>0</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(1)}>1</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(2)}>2</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(3)}>3</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(4)}>4</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(5)}>5</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(6)}>6</div>
-              <div className={classes.filterLink} onClick={() => this.props.changeCostFilter(7)}>7+</div>
+              <div className={classFilterNames('Druid')} onClick={() => classFilterClick('Druid')} title='Druid'></div>
+              <div className={classFilterNames('Hunter')} onClick={() => classFilterClick('Hunter')}
+                   title='Hunter'></div>
+              <div className={classFilterNames('Mage')} onClick={() => classFilterClick('Mage')} title='Mage'></div>
+              <div className={classFilterNames('Paladin')} onClick={() => classFilterClick('Paladin')}
+                   title='Paladin'></div>
+              <div className={classFilterNames('Priest')} onClick={() => classFilterClick('Priest')}
+                   title='Priest'></div>
+              <div className={classFilterNames('Rogue')} onClick={() => classFilterClick('Rogue')} title='Rogue'></div>
+              <div className={classFilterNames('Shaman')} onClick={() => classFilterClick('Shaman')}
+                   title='Shaman'></div>
+              <div className={classFilterNames('Warlock')} onClick={() => classFilterClick('Warlock')}
+                   title='Warlock'></div>
+              <div className={classFilterNames('Warrior')} onClick={() => classFilterClick('Warrior')}
+                   title='Warrior'></div>
+              <div className={classFilterNames('Neutral')} onClick={() => classFilterClick('Neutral')}
+                   title='Neutral'></div>
             </div>
-            <div className='right-align'>
-              <div className={classFilterNames('Druid')}    onClick={() => classFilterClick('Druid')}   title="Druid"></div>
-              <div className={classFilterNames('Hunter')}   onClick={() => classFilterClick('Hunter')}  title="Hunter"></div>
-              <div className={classFilterNames('Mage')}     onClick={() => classFilterClick('Mage')}    title="Mage"></div>
-              <div className={classFilterNames('Paladin')}  onClick={() => classFilterClick('Paladin')} title="Paladin"></div>
-              <div className={classFilterNames('Priest')}   onClick={() => classFilterClick('Priest')}  title="Priest"></div>
-              <div className={classFilterNames('Rogue')}    onClick={() => classFilterClick('Rogue')}   title="Rogue"></div>
-              <div className={classFilterNames('Shaman')}   onClick={() => classFilterClick('Shaman')}  title="Shaman"></div>
-              <div className={classFilterNames('Warlock')}  onClick={() => classFilterClick('Warlock')} title="Warlock"></div>
-              <div className={classFilterNames('Warrior')}  onClick={() => classFilterClick('Warrior')} title="Warrior"></div>
-              <div className={classFilterNames('Neutral')}  onClick={() => classFilterClick('Neutral')} title="Neutral"></div>
+            <div className={classes.manaFilterWrap + ' right-align'}>
+              <div className={costFilterNames(0)} onClick={() => costFilterChange(0)}>0</div>
+              <div className={costFilterNames(1)} onClick={() => costFilterChange(1)}>1</div>
+              <div className={costFilterNames(2)} onClick={() => costFilterChange(2)}>2</div>
+              <div className={costFilterNames(3)} onClick={() => costFilterChange(3)}>3</div>
+              <div className={costFilterNames(4)} onClick={() => costFilterChange(4)}>4</div>
+              <div className={costFilterNames(5)} onClick={() => costFilterChange(5)}>5</div>
+              <div className={costFilterNames(6)} onClick={() => costFilterChange(6)}>6</div>
+              <div className={costFilterNames(7)} onClick={() => costFilterChange(7)}>7+</div>
             </div>
-          </div>
-        </div>
-
-        <div className='row'>
-          <div className="col s12">
-            <span className='waves-effect waves-light btn red lighten-2 left' onClick={this.props.discardAllCards}>
+            <div className={classes.filterBtnGroup}>
+              <span className='waves-effect waves-light btn light-blue darken-4 left'
+                    onClick={this.props.discardAllCards}>
               Remove All Cards
-            </span>
-            <span className='waves-effect waves-light btn red lighten-2 right' onClick={this.props.getAllCards}>
-              Get All Cards
-            </span>
+              </span>
+              <span className='waves-effect waves-light btn light-blue darken-4 right' onClick={this.props.getAllCards}>
+                Get All Cards
+              </span>
+            </div>
           </div>
         </div>
-
-        <div className="separator"></div>
 
         <div className='row'>
           <div className='col s6'>

@@ -24,7 +24,7 @@ const initialState = {
     lastPage: 1,
     displayedCards: []
   },
-  cardsPerPage: 12,
+  cardsPerPage: 8,
   filters: {
     cost: false,
     rarity: false,

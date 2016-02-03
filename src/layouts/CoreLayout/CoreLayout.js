@@ -15,29 +15,29 @@ import github from './GitHub-Mark.png';
 // define it with a plain javascript function...
 function CoreLayout ({ children }) {
   return (
-    <div className='pageWrap'>
-      <nav className='blue grey darken-3'>
+    <div className={classes.pageWrap}>
+      <nav className='blue grey darken-4'>
         <div className='nav-wrapper'>
           <a href='#' className={classes.logo}><img className={classes.shadowfilter} src={logo}
                                                     alt='Hearthstone collection manager'/></a>
           <ul id='nav-mobile' className='right hide-on-med-and-down'>
-            <li><a href='sass.html'>Sass</a></li>
-            <li><a href='badges.html'>Components</a></li>
-            <li><a href='collapsible.html'>JavaScript</a></li>
+            <li><a>To</a></li>
+            <li><a>Be</a></li>
+            <li><a>Added</a></li>
           </ul>
         </div>
       </nav>
 
-      <div className='view-container'>
+      <div className={classes.viewContainer}>
         {children}
       </div>
 
-      <footer className='page-footer grey darken-3'>
+      <footer className='page-footer grey darken-4'>
         <div className='footer-copyright'>
           <div className='container'>
             © 2016 Who Cares
-            <a className={classes.githubLink + ' grey-text text-lighten-4 right'} href='https://github.com/heartless7/hs-collection-manager' target="_blank"><img
-              src={github} alt="Github"/>Github</a>
+            <a className={classes.githubLink + ' grey-text text-lighten-4 right'} href='https://github.com/heartless7/hs-collection-manager' target='_blank'><img
+              src={github} alt='Github'/>Github</a>
           </div>
         </div>
       </footer>

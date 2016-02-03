@@ -13,10 +13,9 @@ export default class CardList extends Component {
     changePage: PropTypes.func
   };
 
-  render() {
+  render () {
     const renderPaging = (page, lastPage) => {
       let pager = [];
-      let begin, end;
       const depth = 2;
 
       pager.push(<li key={'-1'} className='waves-effect' onClick={() => this.props.changePage(this.props.page - 1)}><i
@@ -24,13 +23,13 @@ export default class CardList extends Component {
 
       if (lastPage < depth * 2 + 5) {
         for (let i = 1; i <= lastPage; i++) {
-          pager.push(<li key={i} className={i === page ? 'active white-text' : ''}
+          pager.push(<li key={i} className={i === page ? 'light-blue darken-4 white-text' : ''}
                          onClick={() => this.props.changePage(i)}>{i}</li>);
         }
       } else {
         if (page < depth + 3) {
           for (let i = 1; i <= depth * 2 + 3; i++) {
-            pager.push(<li key={i} className={i === page ? 'active white-text' : ''}
+            pager.push(<li key={i} className={i === page ? 'light-blue darken-4 white-text' : ''}
                            onClick={() => this.props.changePage(i)}>{i}</li>);
           }
 
@@ -41,7 +40,7 @@ export default class CardList extends Component {
           pager.push(<li key={'spacer_left'}>..</li>);
 
           for (let i = lastPage - 2 - depth * 2; i <= lastPage; i++) {
-            pager.push(<li key={i} className={i === page ? 'active white-text' : ''}
+            pager.push(<li key={i} className={i === page ? 'light-blue darken-4 white-text' : ''}
                            onClick={() => this.props.changePage(i)}>{i}</li>);
           }
         } else {
@@ -49,7 +48,7 @@ export default class CardList extends Component {
           pager.push(<li key={'spacer_left'}>..</li>);
 
           for (let i = page - depth; i <= page + depth; i++) {
-            pager.push(<li key={i} className={i === page ? 'active white-text' : ''}
+            pager.push(<li key={i} className={i === page ? 'light-blue darken-4 white-text' : ''}
                            onClick={() => this.props.changePage(i)}>{i}</li>);
           }
 
@@ -64,7 +63,7 @@ export default class CardList extends Component {
       return pager;
     };
 
-    function preloader() {
+    function preloader () {
       return <div className='preloader-wrapper big active'>
         <div className='spinner-layer spinner-blue-only'>
           <div className='circle-clipper left'>
@@ -88,19 +87,20 @@ export default class CardList extends Component {
         <ul className='row'>
           {this.props.cards.map((card) => {
             return (
-              <li className={classes.listCard + ' col s6 m3 center-align'} key={card.cardId}
-                  onClick={() => this.props.onCardClick(card.cardId)}>
+              <li className={classes.listCard + ' col s6 m3 center-align'} key={card.cardId}>
                 <ImageLoader
                   src={card.img}
                   wrapper={React.DOM.div}
                   className={classes.cardWrapper}
                   imgProps={{
-                    className: 'responsive-img'
+                    className: 'responsive-img',
+                    onClick: () => this.props.onCardClick(card.cardId)
                   }}
-                  preloader={preloader}>
+                  preloader={preloader}
+                >
                   Image load failed!
                 </ImageLoader>
-                <div className={classes.copies + ' chip white-text blue lighten-1 z-depth-1'}>x{card.copies}</div>
+                <div className={classes.copies}>x{card.copies}</div>
               </li>
             );
           })}
