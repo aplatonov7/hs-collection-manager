@@ -25,12 +25,12 @@ export class CardManager extends Component {
     discardAllCards: PropTypes.func
   };
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.loadCards();
   }
 
-  render () {
-    const { collection, pool, dustCost, cards, filters, loaded, loading } = this.props.cardManager;
+  render() {
+    const { collection, pool, dustCost, cards, filters, loading } = this.props.cardManager;
 
     const classFilterNames = (pClass) => classNames({
       [classes[pClass.toLowerCase()]]: true,
@@ -69,11 +69,12 @@ export class CardManager extends Component {
           <div className='progress col s8 offset-s2'>
             <div className='indeterminate'></div>
           </div>
-        </div>
+        </div>;
     } else {
       content =
         <div className='row'>
           <div className='col s6'>
+            <h4 className='center-align grey-text text-lighten-3'>Card pool</h4>
             <CardList
               cards={pool.displayedCards.map(id => ({
                 ...cards[id],
@@ -86,6 +87,7 @@ export class CardManager extends Component {
             />
           </div>
           <div className='col s6'>
+            <h4 className='center-align grey-text text-lighten-3'>Your collection</h4>
             <CardList
               cards={collection.displayedCards.map(id => cards[id])}
               page={collection.page}
@@ -94,9 +96,8 @@ export class CardManager extends Component {
               onCardClick={this.props.removeCard}
             />
           </div>
-        </div>
+        </div>;
     }
-
 
     return (
       <div>
@@ -106,40 +107,40 @@ export class CardManager extends Component {
               <span className='waves-effect waves-light btn light-blue darken-4' onClick={this.props.save}>
                 <i className='material-icons left'>call_received</i>Save
               </span>
-              <span className='waves-effect waves-light btn light-blue darken-4' onClick={this.props.load}>
+              <span className='waves-effect waves-light btn light-blue darken-4' onClick={this.props.loadCards}>
                 <i className='material-icons left'>call_made</i>Load
               </span>
             </div>
             <div className={classes.dustInfo}>
               Dust needed to finish the collection: {dustCost}
             </div>
+            <p class='flow-text grey-text text-lighten-3'>No register\login required to use the application. The collection saves to\loads from
+              your browser, so you will always get your restored collection as long as you use the same browser.</p>
           </div>
 
           <div className='col s3'>
-            <div>
-              <p>
-                <input name='group1' type='radio' value='None' id='noneRarityFilter' defaultChecked
-                       onChange={rarityFilterChange}/>
-                <label className={classes.noneRadio} htmlFor='noneRarityFilter'>None</label>
-              </p>
-              <p>
-                <input name='group1' type='radio' value='Common' id='commonRarityFilter' onChange={rarityFilterChange}/>
-                <label className={classes.commonRadio} htmlFor='commonRarityFilter'>Common</label>
-              </p>
-              <p>
-                <input name='group1' type='radio' value='Rare' id='rareRarityFilter' onChange={rarityFilterChange}/>
-                <label className={classes.rareRadio} htmlFor='rareRarityFilter'>Rare</label>
-              </p>
-              <p>
-                <input name='group1' type='radio' value='Epic' id='epicRarityFilter' onChange={rarityFilterChange}/>
-                <label className={classes.epicRadio} htmlFor='epicRarityFilter'>Epic</label>
-              </p>
-              <p>
-                <input name='group1' type='radio' value='Legendary' id='legendaryRarityFilter'
-                       onChange={rarityFilterChange}/>
-                <label className={classes.legendaryRadio} htmlFor='legendaryRarityFilter'>Legendary</label>
-              </p>
-            </div>
+            <p>
+              <input name='group1' type='radio' value='None' id='noneRarityFilter' defaultChecked
+                     onChange={rarityFilterChange}/>
+              <label className={classes.noneRadio} htmlFor='noneRarityFilter'>None</label>
+            </p>
+            <p>
+              <input name='group1' type='radio' value='Common' id='commonRarityFilter' onChange={rarityFilterChange}/>
+              <label className={classes.commonRadio} htmlFor='commonRarityFilter'>Common</label>
+            </p>
+            <p>
+              <input name='group1' type='radio' value='Rare' id='rareRarityFilter' onChange={rarityFilterChange}/>
+              <label className={classes.rareRadio} htmlFor='rareRarityFilter'>Rare</label>
+            </p>
+            <p>
+              <input name='group1' type='radio' value='Epic' id='epicRarityFilter' onChange={rarityFilterChange}/>
+              <label className={classes.epicRadio} htmlFor='epicRarityFilter'>Epic</label>
+            </p>
+            <p>
+              <input name='group1' type='radio' value='Legendary' id='legendaryRarityFilter'
+                     onChange={rarityFilterChange}/>
+              <label className={classes.legendaryRadio} htmlFor='legendaryRarityFilter'>Legendary</label>
+            </p>
           </div>
 
           <div className='col s6'>
@@ -191,4 +192,3 @@ export class CardManager extends Component {
 }
 
 export default connect(mapStateToProps, cardManagerActions)(CardManager);
-
