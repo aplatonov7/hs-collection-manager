@@ -12,6 +12,7 @@ const CHANGE_PAGE_COLLECTION = 'hs-app/collection/CHANGE_PAGE_COLLECTION';
 const CHANGE_COST_FILTER = 'hs-app/collection/CHANGE_COST_FILTER';
 const CHANGE_RARITY_FILTER = 'hs-app/collection/CHANGE_RARITY_FILTER';
 const CHANGE_CLASS_FILTER = 'hs-app/collection/CHANGE_CLASS_FILTER';
+const CHANGE_NAME_FILTER = 'hs-app/collection/CHANGE_NAME_FILTER';
 const GET_ALL_CARDS = 'hs-app/collection/GET_ALL_CARDS';
 const DISCARD_ALL_CARDS = 'hs-app/collection/DISCARD_ALL_CARDS';
 
@@ -32,7 +33,8 @@ const initialState = {
   filters: {
     cost: false,
     rarity: false,
-    playerClass: false
+    playerClass: false,
+    name: false
   },
   dustCost: 0
 };
@@ -77,8 +79,10 @@ const refreshCards = ({
   // Filtering collection
   collection.cards = Object.keys(cards).filter(id => {
     const { cost, rarity, playerClass } = filters;
+    const exp = new RegExp(".*" + filters.name + ".*", "gi");
 
     if (cards[id].copies < 1) return false;
+    if (filters.name && !cards[id].name.match(exp)) return false;
     if (cost !== false && cards[id].cost !== cost && !(cards[id].cost >= 7 && cost === 7)) return false;
     if (rarity && (cards[id].rarity !== rarity)) return false;
     return !(playerClass && (playerClass !== 'Neutral' || cards[id].playerClass) && (!cards[id].playerClass || playerClass !== cards[id].playerClass));
@@ -87,8 +91,10 @@ const refreshCards = ({
   // Filtering card pool
   pool.cards = Object.keys(cards).filter(id => {
     const { cost, rarity, playerClass } = filters;
+    const exp = new RegExp(".*" + filters.name + ".*", "gi");
 
     if (cards[id].rarity === 'Legendary' ? cards[id].copies > 0 : cards[id].copies > 1) return false;
+    if (filters.name && !cards[id].name.match(exp)) return false;
     if (cost !== false && cards[id].cost !== cost && !(cards[id].cost >= 7 && cost === 7)) return false;
     if (rarity && (cards[id].rarity !== rarity)) return false;
     return !(playerClass && (playerClass !== 'Neutral' || cards[id].playerClass) && (!cards[id].playerClass || playerClass !== cards[id].playerClass));
@@ -220,6 +226,19 @@ export default handleActions({
       cardsPerPage: state.cardsPerPage
     })
   }),
+  [CHANGE_NAME_FILTER]: (state, {payload}) => ({
+    ...state,
+    ...refreshCards({
+      cards: state.cards,
+      filters: {
+        ...state.filters,
+        name: payload
+      },
+      collectionPage: state.collection.page,
+      poolPage: state.pool.page,
+      cardsPerPage: state.cardsPerPage
+    })
+  }),
   [CHANGE_PAGE_POOL]: (state, {payload}) => ({
     ...state,
     ...refreshCards({
@@ -319,6 +338,7 @@ export const changePageCollection = createAction(CHANGE_PAGE_COLLECTION);
 export const changeCostFilter = createAction(CHANGE_COST_FILTER);
 export const changeRarityFilter = createAction(CHANGE_RARITY_FILTER);
 export const changeClassFilter = createAction(CHANGE_CLASS_FILTER);
+export const changeNameFilter = createAction(CHANGE_NAME_FILTER);
 export const getAllCards = createAction(GET_ALL_CARDS);
 export const discardAllCards = createAction(DISCARD_ALL_CARDS);
 
@@ -334,6 +354,7 @@ export const actions = {
   changeCostFilter,
   changeRarityFilter,
   changeClassFilter,
+  changeNameFilter,
   getAllCards,
   discardAllCards
 };

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import classes from './CardList.scss';
 import ImageLoader from 'react-imageloader';
+import dog from 'assets/images/dog.gif';
 
 export default class CardList extends Component {
   static propTypes = {
@@ -57,6 +58,8 @@ export default class CardList extends Component {
         }
       }
 
+      if (pager.length === 1) pager.push((<li key={'1'} className='light-blue darken-4 white-text'>1</li>));
+
       pager.push(<li key={'+1'} className='waves-effect' onClick={() => this.props.changePage(this.props.page + 1)}><i
         className='material-icons'>chevron_right</i></li>);
 
@@ -64,19 +67,7 @@ export default class CardList extends Component {
     };
 
     function preloader () {
-      return <div className='preloader-wrapper big active'>
-        <div className='spinner-layer spinner-blue-only'>
-          <div className='circle-clipper left'>
-            <div className='circle'></div>
-          </div>
-          <div className='gap-patch'>
-            <div className='circle'></div>
-          </div>
-          <div className='circle-clipper right'>
-            <div className='circle'></div>
-          </div>
-        </div>
-      </div>;
+      return <img className='responsive-img' src={dog} alt="Waiting dog" title='Please wait' />;
     }
 
     return (
@@ -98,9 +89,10 @@ export default class CardList extends Component {
                   }}
                   preloader={preloader}
                 >
-                  Image load failed!
+                  {preloader()}
+                  <span style={{fontSize: '16px'}}>{card.name}</span>
                 </ImageLoader>
-                <div className={classes.copies}>x{card.copies}</div>
+                <div className={classes.copies}>x{card.copies ? card.copies : 0}</div>
               </li>
             );
           })}

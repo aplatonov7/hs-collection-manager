@@ -4,6 +4,7 @@ import { actions as cardManagerActions } from 'redux/modules/cardManager';
 import { connect } from 'react-redux';
 import classes from './CardManager.scss';
 import classNames from 'classnames';
+import dog from 'assets/images/dog.gif';
 
 const mapStateToProps = (state) => ({
   cardManager: state.cardManager
@@ -22,6 +23,7 @@ export class CardManager extends Component {
     changeCostFilter: PropTypes.func,
     changeRarityFilter: PropTypes.func,
     changeClassFilter: PropTypes.func,
+    changeNameFilter: PropTypes.func,
     getAllCards: PropTypes.func,
     discardAllCards: PropTypes.func
   };
@@ -80,7 +82,10 @@ export class CardManager extends Component {
 
     if (loading) {
       content =
-        <div className='row'>
+        <div className='row center-align'>
+          <div className="col s12">
+            <img src={dog} className='responsive-img' alt='Waiting dog' title='Please wait' style={{width: '100px', transform: 'scale(3)'}} />
+          </div>
           <div className='progress col s8 offset-s2'>
             <div className='indeterminate'></div>
           </div>
@@ -209,7 +214,17 @@ export class CardManager extends Component {
             </div>
           </div>
         </div>
-
+        <div className='row'>
+          <div className='col s4 offset-s4'>
+            <div className='input-field'>
+              <input id='cardNameSearch' type='text' onChange={(e) => {
+                let name = e.target.value ? e.target.value : false;
+                this.props.changeNameFilter(name);
+              }} />
+              <label htmlFor="first_name">Card name</label>
+            </div>
+          </div>
+        </div>
         {content}
       </div>
     );
