@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 import '../../styles/core.scss';
-import logo from './hs-swirl-logo.svg';
 import classes from './CoreLayout.scss';
+import logo from './hs-swirl-logo.svg';
 import github from './GitHub-Mark.png';
 
 // Note: Stateless/function components *will not* hot reload!
@@ -16,17 +17,18 @@ import github from './GitHub-Mark.png';
 function CoreLayout ({ children }) {
   return (
     <div className={classes.pageWrap}>
-      <nav className='blue grey darken-4'>
-        <div className='nav-wrapper'>
-          <a href='#' className={classes.logo}><img className={classes.shadowfilter} src={logo}
-                                                    alt='Hearthstone collection manager'/></a>
-          <ul id='nav-mobile' className='right hide-on-med-and-down'>
-            <li><a>To</a></li>
-            <li><a>Be</a></li>
-            <li><a>Added</a></li>
-          </ul>
-        </div>
-      </nav>
+      <div className='navbar-fixed'>
+        <nav className='blue grey darken-4'>
+          <div className='nav-wrapper'>
+            <a href='#' className={classes.logo}><img className={classes.shadowfilter} src={logo}
+                                                      alt='Hearthstone collection manager'/></a>
+            <ul id='nav-mobile' className='right hide-on-med-and-down'>
+              <li><Link to='/'>Collection</Link></li>
+              <li><Link to='/stats'>Stats</Link></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
 
       <div className={classes.viewContainer}>
         {children}

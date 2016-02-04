@@ -29,7 +29,7 @@ export class CardManager extends Component {
   };
 
   componentDidMount () {
-    this.props.loadCards();
+    if (Object.keys(this.props.cardManager.cards).length === 0) this.props.loadCards();
   }
 
   render () {
@@ -150,25 +150,28 @@ export class CardManager extends Component {
 
           <div className='col s2'>
             <p>
-              <input name='group1' type='radio' value='None' id='noneRarityFilter' defaultChecked
-                     onChange={rarityFilterChange}/>
+              <input name='rarityFilters' type='radio' value='None' id='noneRarityFilter'
+                     checked={filters.rarity === false} onChange={rarityFilterChange}/>
               <label className={classes.noneRadio} htmlFor='noneRarityFilter'>None</label>
             </p>
             <p>
-              <input name='group1' type='radio' value='Common' id='commonRarityFilter' onChange={rarityFilterChange}/>
+              <input name='rarityFilters' type='radio' value='Common' id='commonRarityFilter'
+                     checked={filters.rarity === 'Common'} onChange={rarityFilterChange}/>
               <label className={classes.commonRadio} htmlFor='commonRarityFilter'>Common</label>
             </p>
             <p>
-              <input name='group1' type='radio' value='Rare' id='rareRarityFilter' onChange={rarityFilterChange}/>
+              <input name='rarityFilters' type='radio' value='Rare' id='rareRarityFilter'
+                     checked={filters.rarity === 'Rare'} onChange={rarityFilterChange}/>
               <label className={classes.rareRadio} htmlFor='rareRarityFilter'>Rare</label>
             </p>
             <p>
-              <input name='group1' type='radio' value='Epic' id='epicRarityFilter' onChange={rarityFilterChange}/>
+              <input name='rarityFilters' type='radio' value='Epic' id='epicRarityFilter'
+                     checked={filters.rarity === 'Epic'} onChange={rarityFilterChange}/>
               <label className={classes.epicRadio} htmlFor='epicRarityFilter'>Epic</label>
             </p>
             <p>
-              <input name='group1' type='radio' value='Legendary' id='legendaryRarityFilter'
-                     onChange={rarityFilterChange}/>
+              <input name='rarityFilters' type='radio' value='Legendary' id='legendaryRarityFilter'
+                     checked={filters.rarity === 'Legendary'} onChange={rarityFilterChange}/>
               <label className={classes.legendaryRadio} htmlFor='legendaryRarityFilter'>Legendary</label>
             </p>
           </div>
@@ -221,7 +224,7 @@ export class CardManager extends Component {
                 let name = e.target.value ? e.target.value : false;
                 this.props.changeNameFilter(name);
               }} />
-              <label htmlFor='first_name'>Card name</label>
+              <label htmlFor='cardNameSearch'>Card name</label>
             </div>
           </div>
         </div>

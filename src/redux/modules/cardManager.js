@@ -17,7 +17,7 @@ const GET_ALL_CARDS = 'hs-app/collection/GET_ALL_CARDS';
 const DISCARD_ALL_CARDS = 'hs-app/collection/DISCARD_ALL_CARDS';
 
 const initialState = {
-  cards: [],
+  cards: {},
   loaded: false,
   collection: {
     page: 1,
@@ -148,11 +148,14 @@ export default handleActions({
     error: payload
   }),
   [GET_ALL_CARDS]: (state) => {
-    let cards = Object.assign({}, state.cards);
+    let cards = {};
 
-    for (const id in cards) {
-      if (cards.hasOwnProperty(id)) {
-        cards[id].copies = cards[id].rarity === 'Legendary' ? 1 : 2;
+    for (let id in state.cards) {
+      if (state.cards.hasOwnProperty(id)) {
+        cards[id] = {
+          ...state.cards[id],
+          copies: state.cards[id].rarity === 'Legendary' ? 1 : 2
+        };
       }
     }
 
@@ -168,11 +171,14 @@ export default handleActions({
     };
   },
   [DISCARD_ALL_CARDS]: (state) => {
-    let cards = Object.assign({}, state.cards);
+    let cards = {};
 
-    for (const id in cards) {
-      if (cards.hasOwnProperty(id)) {
-        cards[id].copies = 0;
+    for (let id in state.cards) {
+      if (state.cards.hasOwnProperty(id)) {
+        cards[id] = {
+          ...state.cards[id],
+          copies: 0
+        };
       }
     }
 
@@ -260,7 +266,10 @@ export default handleActions({
     })
   }),
   [REMOVE_CARD]: (state, {payload}) => {
-    let cards = Object.assign({}, state.cards);
+    let cards = {
+      ...state.cards,
+      [payload]: Object.assign({}, state.cards[payload])
+    };
 
     if (cards[payload].copies > 0) {
       cards[payload].copies--;
@@ -278,7 +287,10 @@ export default handleActions({
     };
   },
   [ADD_CARD]: (state, {payload}) => {
-    let cards = Object.assign({}, state.cards);
+    let cards = {
+      ...state.cards,
+      [payload]: Object.assign({}, state.cards[payload])
+    };
 
     if (
       (cards[payload].rarity === 'Legendary' && cards[payload].copies < 1) ||
