@@ -67,7 +67,7 @@ export default class CardList extends Component {
     };
 
     function preloader () {
-      return <img className='responsive-img' src={dog} alt="Waiting dog" title='Please wait' />;
+      return <img className='responsive-img' src={dog} alt='Waiting dog' title='Please wait' />;
     }
 
     return (

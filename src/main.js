@@ -12,8 +12,6 @@ const history = useRouterHistory(createHistory)(historyConfig);
 const initialState = window.__INITIAL_STATE__;
 const store = configureStore({ initialState, history });
 
-
-
 // Render the React application to the DOM
 ReactDOM.render(
   <Root history={history} routes={routes} store={store} />,

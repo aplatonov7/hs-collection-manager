@@ -83,7 +83,7 @@ export class CardManager extends Component {
     if (loading) {
       content =
         <div className='row center-align'>
-          <div className="col s12">
+          <div className='col s12'>
             <img src={dog} className='responsive-img' alt='Waiting dog' title='Please wait' style={{width: '100px', transform: 'scale(3)'}} />
           </div>
           <div className='progress col s8 offset-s2'>
@@ -221,7 +221,7 @@ export class CardManager extends Component {
                 let name = e.target.value ? e.target.value : false;
                 this.props.changeNameFilter(name);
               }} />
-              <label htmlFor="first_name">Card name</label>
+              <label htmlFor='first_name'>Card name</label>
             </div>
           </div>
         </div>

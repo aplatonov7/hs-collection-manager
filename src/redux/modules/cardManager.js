@@ -79,7 +79,7 @@ const refreshCards = ({
   // Filtering collection
   collection.cards = Object.keys(cards).filter(id => {
     const { cost, rarity, playerClass } = filters;
-    const exp = new RegExp(".*" + filters.name + ".*", "gi");
+    const exp = new RegExp('.*' + filters.name + '.*', 'gi');
 
     if (cards[id].copies < 1) return false;
     if (filters.name && !cards[id].name.match(exp)) return false;
@@ -91,7 +91,7 @@ const refreshCards = ({
   // Filtering card pool
   pool.cards = Object.keys(cards).filter(id => {
     const { cost, rarity, playerClass } = filters;
-    const exp = new RegExp(".*" + filters.name + ".*", "gi");
+    const exp = new RegExp('.*' + filters.name + '.*', 'gi');
 
     if (cards[id].rarity === 'Legendary' ? cards[id].copies > 0 : cards[id].copies > 1) return false;
     if (filters.name && !cards[id].name.match(exp)) return false;
