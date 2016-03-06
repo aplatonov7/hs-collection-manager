@@ -1,0 +1,30 @@
+.warlock,
+.warrior,
+.rogue,
+.priest,
+.mage,
+.druid,
+.hunter,
+.paladin,
+.shaman,
+.neutral{
+  composes: classIcon  from 'styles/icons.scss';
+  cursor: pointer;
+  filter: grayscale(100%);
+  margin-right: 3px;
+}
+
+.active {
+  filter: grayscale(0%);
+}
+
+.warlock  {composes: warlock  from 'styles/icons.scss';}
+.warrior  {composes: warrior  from 'styles/icons.scss';}
+.rogue    {composes: rogue    from 'styles/icons.scss';}
+.priest   {composes: priest   from 'styles/icons.scss';}
+.mage     {composes: mage     from 'styles/icons.scss';}
+.druid    {composes: druid    from 'styles/icons.scss';}
+.hunter   {composes: hunter   from 'styles/icons.scss';}
+.paladin  {composes: paladin  from 'styles/icons.scss';}
+.shaman   {composes: shaman   from 'styles/icons.scss';}
+.neutral  {composes: neutral  from 'styles/icons.scss';}

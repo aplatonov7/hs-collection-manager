@@ -58,8 +58,8 @@ export class CardManager extends Component {
         set[playerClass][rarity].collected += copies;
         set[playerClass][rarity].uniqueTotal += 1;
         set[playerClass][rarity].uniqueCollected += +!!copies;
-        set[playerClass][rarity].dustTotal += set[playerClass][rarity].total * rarityData[rarity].craft;
-        set[playerClass][rarity].dustCollected += set[playerClass][rarity].collected * rarityData[rarity].craft;
+        set[playerClass][rarity].dustTotal += (rarity === 'Legendary' ? 1 : 2) * rarityData[rarity].craft;
+        set[playerClass][rarity].dustCollected += copies * rarityData[rarity].craft;
       }
 
       return stats;

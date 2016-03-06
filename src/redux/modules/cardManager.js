@@ -339,7 +339,7 @@ export const loadCards = () => {
   };
 };
 
-export const save = createAction(SAVE);
+export const saveCards = createAction(SAVE);
 export const load = createAction(LOAD);
 export const load_success = createAction(LOAD_SUCCESS);
 export const load_failure = createAction(LOAD_FAILURE);
@@ -355,7 +355,7 @@ export const getAllCards = createAction(GET_ALL_CARDS);
 export const discardAllCards = createAction(DISCARD_ALL_CARDS);
 
 export const actions = {
-  save,
+  saveCards,
   loadCards,
   load_success,
   load_failure,
