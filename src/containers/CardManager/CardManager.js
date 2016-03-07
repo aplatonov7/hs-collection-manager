@@ -7,7 +7,8 @@ import TextFilter from 'components/CollectionFilters/TextFilter';
 import CardListWrap from 'components/CardListWrap/CardListWrap';
 
 const mapStateToProps = (state) => ({
-  cardManager: state.cardManager
+  cardManager: state.cardManager,
+  loading: state.loading
 });
 
 export class CardManager extends Component {
@@ -26,7 +27,8 @@ export class CardManager extends Component {
     changeClassFilter: PropTypes.func,
     changeNameFilter: PropTypes.func,
     getAllCards: PropTypes.func,
-    discardAllCards: PropTypes.func
+    discardAllCards: PropTypes.func,
+    loading: PropTypes.bool
   };
 
   handleSaveClick () {
@@ -92,8 +94,9 @@ export class CardManager extends Component {
         <TextFilter onTextFilterChange={e => this.handleTextFilterChange(e)} />
 
         <CardListWrap
-          onFileUpload={this.handleFileUpload}
-          onUploadClick={this.handleUploadClick}
+          loading={this.props.loading}
+          onFileUpload={e => this.handleFileUpload(e)}
+          onUploadClick={e => this.handleUploadClick(e)}
           pool={this.props.cardManager.pool}
           collection={this.props.cardManager.collection}
           cards={this.props.cardManager.cards}

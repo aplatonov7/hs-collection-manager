@@ -16,6 +16,6 @@ export default (
     <IndexRoute component={HomeView} />
     <Route path='/stats' component={StatsView} />
     <Route path='/404' component={NotFoundView} />
-    <Redirect from='*' to='/404' />
+    <Redirect from='*' to='/' />
   </Route>
 );
