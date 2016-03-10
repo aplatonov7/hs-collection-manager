@@ -75,7 +75,6 @@ const refreshCards = ({
     cards: {},
     page: poolPage
   };
-
   // Filtering collection
   collection.cards = Object.keys(cards).filter(id => {
     const { cost, rarity, playerClass } = filters;
