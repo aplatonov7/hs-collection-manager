@@ -31,12 +31,9 @@ const CardListWrap = (props) => (
             Card pool
           </h4>
           <CardList
-            cards={props.pool.displayedCards.map(id => ({
-                  ...props.cards[id],
-                  copies: props.cards[id].rarity === 'Legendary' ? 1 - props.cards[id].copies : 2 - props.cards[id].copies
-                }))}
-            page={props.pool.page}
-            lastPage={props.pool.lastPage}
+            cards={props.pool}
+            page={props.poolPage}
+            lastPage={props.poolLastPage}
             onPageChange={props.onPageChangePool}
             onCardClick={props.addCard}
           />
@@ -50,9 +47,9 @@ const CardListWrap = (props) => (
                download='collection.json'><i className='material-icons'>play_for_work</i></a>
           </h4>
           <CardList
-            cards={props.collection.displayedCards.map(id => props.cards[id])}
-            page={props.collection.page}
-            lastPage={props.collection.lastPage}
+            cards={props.collection}
+            page={props.collectionPage}
+            lastPage={props.collectionLastPage}
             onPageChange={props.onPageChangeCollection}
             onCardClick={props.removeCard}
           />

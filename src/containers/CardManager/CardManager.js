@@ -1,22 +1,29 @@
 import React, { Component, PropTypes } from 'react';
-import { actions as cardManagerActions } from 'redux/modules/cardManager';
+import cardsActions from 'redux/modules/cards/actions';
+import managerActions from 'redux/modules/manager/actions';
 import { connect } from 'react-redux';
+
+import selectors from 'redux/modules/manager/selectors';
 
 import CollectionHeader from 'components/Collection/CollectionHeader';
 import TextFilter from 'components/CollectionFilters/TextFilter';
 import CardListWrap from 'components/CardListWrap/CardListWrap';
 
 const mapStateToProps = (state) => ({
-  cardManager: state.cardManager,
-  loading: state.loading
+  manager: state.manager,
+  cards: state.cards,
+  collection: selectors.collectionPagedSelector(state),
+  pool: selectors.poolPagedSelector(state),
+  poolLastPage: selectors.poolLastPageSelector(state),
+  collectionLastPage: selectors.collectionLastPageSelector(state),
+  dustCost: selectors.dustCostSelector(state)
 });
 
 export class CardManager extends Component {
   static propTypes = {
-    cardManager: PropTypes.object,
+    cards: PropTypes.object,
+    manager: PropTypes.object,
     dispatch: PropTypes.func,
-    saveCards: PropTypes.func,
-    load_success: PropTypes.func,
     loadCards: PropTypes.func,
     addCard: PropTypes.func,
     removeCard: PropTypes.func,
@@ -27,12 +34,11 @@ export class CardManager extends Component {
     changeClassFilter: PropTypes.func,
     changeNameFilter: PropTypes.func,
     getAllCards: PropTypes.func,
-    discardAllCards: PropTypes.func,
-    loading: PropTypes.bool
+    discardAllCards: PropTypes.func
   };
 
   handleSaveClick () {
-    this.props.saveCards();
+    window.localStorage.setItem('collection', JSON.stringify(this.props.cards.cardsById));
   }
 
   handleLoadClick () {
@@ -50,12 +56,12 @@ export class CardManager extends Component {
   }
 
   handleClassFilterChange (pClass) {
-    let filter = pClass === this.props.cardManager.filters.playerClass ? false : pClass;
+    let filter = pClass === this.props.manager.filters.playerClass ? false : pClass;
     this.props.changeClassFilter(filter);
   }
 
   handleCostFilterChange (cost) {
-    let filter = cost === this.props.cardManager.filters.cost ? false : cost;
+    let filter = cost === this.props.manager.filters.cost ? false : cost;
     this.props.changeCostFilter(filter);
   }
 
@@ -67,14 +73,14 @@ export class CardManager extends Component {
     const reader = new FileReader();
     reader.onload = (e) => {
       const cards = JSON.parse(event.target.result);
-      this.props.load_success(cards);
+      this.props.loadCards(cards);
     };
     reader.readAsText(e.target.files[0]);
     e.target.value = '';
   }
 
   componentDidMount () {
-    if (Object.keys(this.props.cardManager.cards).length === 0) this.props.loadCards();
+    if (Object.keys(this.props.cards.cardsById).length === 0) this.props.loadCards();
   }
 
   render () {
@@ -83,8 +89,8 @@ export class CardManager extends Component {
         <CollectionHeader
           onSaveClick={_ => this.handleSaveClick()}
           onLoadClick={_ => this.handleLoadClick()}
-          dust={this.props.cardManager.dustCost}
-          filters={this.props.cardManager.filters}
+          dust={this.props.dustCost}
+          filters={this.props.manager.filters}
           onRarityFilterChange={e => this.handleRarityFilterChange(e)}
           onClassFilterChange={e => this.handleClassFilterChange(e)}
           onCostFilterChange={e => this.handleCostFilterChange(e)}
@@ -94,12 +100,16 @@ export class CardManager extends Component {
         <TextFilter onTextFilterChange={e => this.handleTextFilterChange(e)} />
 
         <CardListWrap
-          loading={this.props.loading}
+          loading={this.props.cards.loading}
           onFileUpload={e => this.handleFileUpload(e)}
           onUploadClick={e => this.handleUploadClick(e)}
-          pool={this.props.cardManager.pool}
-          collection={this.props.cardManager.collection}
-          cards={this.props.cardManager.cards}
+          pool={this.props.pool}
+          poolPage={this.props.manager.poolPage}
+          poolLastPage={this.props.poolLastPage}
+          collection={this.props.collection}
+          collectionPage={this.props.manager.collectionPage}
+          collectionLastPage={this.props.collectionLastPage}
+          cards={this.props.cards.cardsByid}
           onPageChangePool={this.props.changePagePool}
           onPageChangeCollection={this.props.changePageCollection}
           addCard={this.props.addCard}
@@ -109,4 +119,4 @@ export class CardManager extends Component {
   }
 }
 
-export default connect(mapStateToProps, cardManagerActions)(CardManager);
+export default connect(mapStateToProps, {...cardsActions, ...managerActions})(CardManager);

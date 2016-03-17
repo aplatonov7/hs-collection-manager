@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
 import { routeReducer as router } from 'react-router-redux';
-import cardManager from './modules/cardManager';
+import cards from './modules/cards/reducer';
+import manager from './modules/manager/reducer';
 
 export default combineReducers({
-  cardManager,
+  cards,
+  manager,
   router
 });

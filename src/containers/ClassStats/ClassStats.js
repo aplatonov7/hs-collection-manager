@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { actions as cardManagerActions } from 'redux/modules/cardManager';
+import { actions as cardManagerActions } from 'redux/modules/cards/reducer';
+import ChartistGraph from 'react-chartist';
 
 const mapStateToProps = (state) => ({
   cardManager: state.cardManager
@@ -65,17 +66,33 @@ export class CardManager extends Component {
       return stats;
     })(this.props.cardManager.cards);
 
+    var data = {
+      labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10'],
+      series: [
+        [1, 2, 4, 8, 16, -2, -1, -4, -16, -2]
+      ]
+    };
+
+    var options = {
+      high: 20,
+      low: -20,
+      axisX: {
+        labelInterpolationFnc: function(value, index) {
+          return index % 2 === 0 ? value : null;
+        }
+      }
+    };
+
+    var type = 'Bar'
+
     return (
       <div className='row'>
-        {Object.keys(stats).map(set => stats[set]).map(set => (
-          <div key={set.name} className='col s4'>
-            <h4>{set.name}</h4>
-
-            <pre>
-              {JSON.stringify(set, null, 2)}
-            </pre>
-          </div>
-        ))}
+        <div style={{
+          padding: '2em',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)'
+        }}>
+          <ChartistGraph data={data} options={options} type={type} />
+        </div>
       </div>
     );
   }
